@@ -14,3 +14,22 @@
     - ocb $ODOO_VERSION
     # Example of a merge of the PR with the number <PR>
     # - oca refs/pull/<PR>/head
+
+./enterprise:
+  defaults:
+    # Shallow repositories ($DEPTH_DEFAULT=1) are faster & thinner
+    # You may need a bigger depth when merging PRs (use $DEPTH_MERGE
+    # for a sane value of 100 commits)
+    depth: $DEPTH_DEFAULT
+  remotes:
+    enterprise: git@github.com:odoo/enterprise.git
+  target: enterprise $ODOO_VERSION
+  merges:
+    - enterprise $ODOO_VERSION
+    
+./odoo-sh:
+  remotes:
+    odoo-sh: $ODOO_SH_REPOSITORY
+  target: odoo-sh $ODOO_SH_BRANCH
+  merges:
+    - odoo-sh $ODOO_SH_BRANCH
