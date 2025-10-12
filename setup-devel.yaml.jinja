@@ -37,6 +37,8 @@ services:
       UID: "${DOODBA_GITAGGREGATE_UID:-1000}"
       GID: "${DOODBA_GITAGGREGATE_GID:-1000}"
       UMASK: "$DOODBA_UMASK"
+      ODOO_SH_REPOSITORY: "${ODOO_SH_REPOSITORY}"
+      ODOO_SH_BRANCH: "${ODOO_SH_BRANCH}"
     user: root
     entrypoint: autoaggregate
 
