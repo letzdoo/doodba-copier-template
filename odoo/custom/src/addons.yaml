@@ -1,0 +1,4 @@
+enterprise:
+  - "*" # All enterprise addons
+odoo-sh:
+  - "*" # All odoo-sh addons
