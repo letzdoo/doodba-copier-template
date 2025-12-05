@@ -31,7 +31,6 @@ services:
       - public
     volumes:
       - ./odoo/custom/src:/opt/odoo/custom/src:rw,z
-      - ${CODER_BINARY}:${CODER_BINARY}:ro
     environment:
       DEPTH_DEFAULT: 100
       # XXX Export these variables before running setup to own the files

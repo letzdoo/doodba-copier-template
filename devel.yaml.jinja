@@ -63,7 +63,6 @@ services:
     volumes:
       - ./odoo/custom:/opt/odoo/custom:ro,z
       - ./odoo/auto:/opt/odoo/auto:rw,z
-      - ${CODER_BINARY}:${CODER_BINARY}:ro
     depends_on:
       - db
       {% for host in whitelisted_hosts -%}

@@ -485,10 +485,25 @@ def git_aggregate(c):
 
     Executes git-aggregator from within the doodba container.
     """
+    # Prepare environment with git delegation support
+    aggregate_env = dict(UID_ENV)
+
+    # Pass through git-related environment variables for authenticated operations
+    for env_var in [
+        "GIT_SSH_COMMAND",
+        "GIT_ASKPASS",
+        "GIT_AUTHOR_NAME",
+        "GIT_AUTHOR_EMAIL",
+        "GIT_COMMITTER_NAME",
+        "GIT_COMMITTER_EMAIL",
+    ]:
+        if env_var in os.environ:
+            aggregate_env[env_var] = os.environ[env_var]
+
     with c.cd(str(PROJECT_ROOT)):
         c.run(
             DOCKER_COMPOSE_CMD + " --file setup-devel.yaml run --rm -T odoo",
-            env=UID_ENV,
+            env=aggregate_env,
         )
     write_code_workspace_file(c)
     for git_folder in SRC_PATH.glob("*/.git/.."):

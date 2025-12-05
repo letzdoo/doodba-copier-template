@@ -8,18 +8,13 @@ When using doodba within a Coder workspace, git operations inside Docker contain
 
 ## Solution
 
-Pass through Coder's git delegation environment variables and binary to Docker containers, allowing authenticated git operations without copying SSH keys.
+Pass through Coder's git delegation environment variables to Docker containers, allowing authenticated git operations without copying SSH keys.
 
 ## Changes Made
 
 ### 1. `setup-devel.yaml.jinja`
 
-**Volume Mount (line 34):**
-```yaml
-- ${CODER_BINARY}:${CODER_BINARY}:ro
-```
-
-**Environment Variables (lines 41-47):**
+**Environment Variables:**
 ```yaml
 # Coder git delegation for authenticated repositories
 GIT_SSH_COMMAND: "${GIT_SSH_COMMAND:-}"
@@ -32,12 +27,7 @@ GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
 
 ### 2. `devel.yaml.jinja`
 
-**Volume Mount (line 66):**
-```yaml
-- ${CODER_BINARY}:${CODER_BINARY}:ro
-```
-
-**Environment Variables (lines 56-62):**
+**Environment Variables:**
 ```yaml
 # Coder git delegation for authenticated repositories
 GIT_SSH_COMMAND: "${GIT_SSH_COMMAND:-}"
@@ -48,29 +38,17 @@ GIT_COMMITTER_NAME: "${GIT_COMMITTER_NAME:-}"
 GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
 ```
 
-### 3. `aggregate.sh.jinja` (NEW FILE)
+### 3. `aggregate.sh.jinja`
 
 A convenience script that automatically:
-- Extracts the Coder binary path from `GIT_SSH_COMMAND`
 - Sets required ownership variables
 - Runs gitaggregator
 
-```bash
-#!/bin/bash
-set -e
+The git environment variables (GIT_SSH_COMMAND, etc.) are automatically inherited from the host environment.
 
-# Extract the Coder binary path from GIT_SSH_COMMAND
-if [ -n "$GIT_SSH_COMMAND" ]; then
-    export CODER_BINARY="${GIT_SSH_COMMAND%% *}"
-    echo "Using Coder binary: $CODER_BINARY"
-fi
+### 4. `tasks_downstream.py`
 
-export DOODBA_GITAGGREGATE_UID="$(id -u)"
-export DOODBA_GITAGGREGATE_GID="$(id -g)"
-export DOODBA_UMASK="$(umask)"
-
-docker-compose -f setup-devel.yaml run --rm odoo
-```
+Updated the `git_aggregate` task to pass through git environment variables when running docker-compose.
 
 ## Usage
 
@@ -81,9 +59,18 @@ Simply run:
 ./aggregate.sh
 ```
 
+### Using invoke
+
+Run:
+```bash
+invoke git-aggregate
+```
+
+The task will automatically pass through git environment variables if they exist.
+
 ### In Non-Coder Environments
 
-The changes are backward compatible. If `GIT_SSH_COMMAND` or `CODER_BINARY` are not set, the containers fall back to standard SSH authentication (keys in `odoo/custom/ssh/`).
+The changes are backward compatible. If git environment variables are not set, the containers fall back to standard SSH authentication (keys in `odoo/custom/ssh/`).
 
 ## Benefits
 

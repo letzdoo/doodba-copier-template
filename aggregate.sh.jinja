@@ -1,18 +1,10 @@
 #!/bin/bash
-# Script to run gitaggregator with Coder git delegation
+# Script to run gitaggregator with git authentication
 #
 # This script automatically exports the required environment variables
-# for Coder's git authentication to work inside the Docker container.
+# for git authentication to work inside the Docker container.
 
 set -e
-
-# Extract the Coder binary path from GIT_SSH_COMMAND
-if [ -n "$GIT_SSH_COMMAND" ]; then
-    export CODER_BINARY="${GIT_SSH_COMMAND%% *}"
-    echo "Using Coder binary: $CODER_BINARY"
-else
-    echo "Warning: GIT_SSH_COMMAND is not set. Coder git delegation may not work."
-fi
 
 # Set ownership variables
 export DOODBA_GITAGGREGATE_UID="$(id -u)"
