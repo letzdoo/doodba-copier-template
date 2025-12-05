@@ -38,35 +38,23 @@ GIT_COMMITTER_NAME: "${GIT_COMMITTER_NAME:-}"
 GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
 ```
 
-### 3. `aggregate.sh.jinja`
-
-A convenience script that automatically:
-- Sets required ownership variables
-- Runs gitaggregator
-
-The git environment variables (GIT_SSH_COMMAND, etc.) are automatically inherited from the host environment.
-
-### 4. `tasks_downstream.py`
+### 3. `tasks_downstream.py`
 
 Updated the `git_aggregate` task to pass through git environment variables when running docker-compose.
 
 ## Usage
 
-### In Coder Workspaces
-
 Simply run:
-```bash
-./aggregate.sh
-```
-
-### Using invoke
-
-Run:
 ```bash
 invoke git-aggregate
 ```
 
-The task will automatically pass through git environment variables if they exist.
+The task will automatically:
+- Set required ownership variables
+- Pass through git environment variables if they exist
+- Run gitaggregator
+- Update the code workspace file
+- Manage pre-commit hooks
 
 ### In Non-Coder Environments
 
