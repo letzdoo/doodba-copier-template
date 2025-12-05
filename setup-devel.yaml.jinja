@@ -45,6 +45,8 @@ services:
       GIT_AUTHOR_EMAIL: "${GIT_AUTHOR_EMAIL:-}"
       GIT_COMMITTER_NAME: "${GIT_COMMITTER_NAME:-}"
       GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
+      ODOO_SH_REPOSITORY: "${ODOO_SH_REPOSITORY}"
+      ODOO_SH_BRANCH: "${ODOO_SH_BRANCH}"
     user: root
     entrypoint: autoaggregate
 
