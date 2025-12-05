@@ -24,6 +24,7 @@ Mounts the Coder binary into the container. Defaults to `/usr/bin/env` if not se
 ```yaml
 # Coder git delegation for authenticated repositories
 CODER_AGENT_URL: "${CODER_AGENT_URL:-}"
+CODER_AGENT_TOKEN: "${CODER_AGENT_TOKEN:-}"
 GIT_SSH_COMMAND: "${GIT_SSH_COMMAND:-}"
 GIT_ASKPASS: "${GIT_ASKPASS:-}"
 GIT_AUTHOR_NAME: "${GIT_AUTHOR_NAME:-}"
@@ -43,6 +44,7 @@ GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
 ```yaml
 # Coder git delegation for authenticated repositories
 CODER_AGENT_URL: "${CODER_AGENT_URL:-}"
+CODER_AGENT_TOKEN: "${CODER_AGENT_TOKEN:-}"
 GIT_SSH_COMMAND: "${GIT_SSH_COMMAND:-}"
 GIT_ASKPASS: "${GIT_ASKPASS:-}"
 GIT_AUTHOR_NAME: "${GIT_AUTHOR_NAME:-}"

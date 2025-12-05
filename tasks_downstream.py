@@ -499,6 +499,7 @@ def git_aggregate(c):
     # Pass through git-related environment variables for authenticated operations
     for env_var in [
         "CODER_AGENT_URL",
+        "CODER_AGENT_TOKEN",
         "GIT_SSH_COMMAND",
         "GIT_ASKPASS",
         "GIT_AUTHOR_NAME",
