@@ -8,11 +8,17 @@ When using doodba within a Coder workspace, git operations inside Docker contain
 
 ## Solution
 
-Pass through Coder's git delegation environment variables to Docker containers, allowing authenticated git operations without copying SSH keys.
+Pass through Coder's git delegation environment variables and mount the Coder binary to Docker containers, allowing authenticated git operations without copying SSH keys.
 
 ## Changes Made
 
 ### 1. `setup-devel.yaml.jinja`
+
+**Volume Mount:**
+```yaml
+- ${CODER_BINARY:-/usr/bin/env}:${CODER_BINARY:-/usr/bin/env}:ro
+```
+Mounts the Coder binary into the container. Defaults to `/usr/bin/env` if not set.
 
 **Environment Variables:**
 ```yaml
@@ -27,6 +33,11 @@ GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
 
 ### 2. `devel.yaml.jinja`
 
+**Volume Mount:**
+```yaml
+- ${CODER_BINARY:-/usr/bin/env}:${CODER_BINARY:-/usr/bin/env}:ro
+```
+
 **Environment Variables:**
 ```yaml
 # Coder git delegation for authenticated repositories
@@ -40,7 +51,10 @@ GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
 
 ### 3. `tasks_downstream.py`
 
-Updated the `git_aggregate` task to pass through git environment variables when running docker-compose.
+Updated the `git_aggregate` task to:
+- Extract CODER_BINARY path from GIT_SSH_COMMAND
+- Pass through git environment variables when running docker-compose
+- Automatically detect and configure Coder git delegation
 
 ## Usage
 

@@ -488,6 +488,14 @@ def git_aggregate(c):
     # Prepare environment with git delegation support
     aggregate_env = dict(UID_ENV)
 
+    # Extract CODER_BINARY from GIT_SSH_COMMAND if present (for Coder git delegation)
+    git_ssh_command = os.environ.get("GIT_SSH_COMMAND", "")
+    if git_ssh_command:
+        # GIT_SSH_COMMAND format: "/path/to/coder gitssh -- ..."
+        coder_binary = git_ssh_command.split()[0]
+        if os.path.exists(coder_binary):
+            aggregate_env["CODER_BINARY"] = coder_binary
+
     # Pass through git-related environment variables for authenticated operations
     for env_var in [
         "GIT_SSH_COMMAND",
