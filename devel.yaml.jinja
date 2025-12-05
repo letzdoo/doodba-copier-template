@@ -53,9 +53,17 @@ services:
       WDB_WEB_PORT: "${PORT_PREFIX:-{{ macros.version_major(odoo_version) }}}984"
       # To avoid installing demo data export DOODBA_WITHOUT_DEMO=all
       WITHOUT_DEMO: "${DOODBA_WITHOUT_DEMO-false}"
+      # Coder git delegation for authenticated repositories
+      GIT_SSH_COMMAND: "${GIT_SSH_COMMAND:-}"
+      GIT_ASKPASS: "${GIT_ASKPASS:-}"
+      GIT_AUTHOR_NAME: "${GIT_AUTHOR_NAME:-}"
+      GIT_AUTHOR_EMAIL: "${GIT_AUTHOR_EMAIL:-}"
+      GIT_COMMITTER_NAME: "${GIT_COMMITTER_NAME:-}"
+      GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
     volumes:
       - ./odoo/custom:/opt/odoo/custom:ro,z
       - ./odoo/auto:/opt/odoo/auto:rw,z
+      - ${CODER_BINARY}:${CODER_BINARY}:ro
     depends_on:
       - db
       {% for host in whitelisted_hosts -%}

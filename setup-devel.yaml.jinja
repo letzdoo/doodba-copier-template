@@ -31,12 +31,20 @@ services:
       - public
     volumes:
       - ./odoo/custom/src:/opt/odoo/custom/src:rw,z
+      - ${CODER_BINARY}:${CODER_BINARY}:ro
     environment:
       DEPTH_DEFAULT: 100
       # XXX Export these variables before running setup to own the files
       UID: "${DOODBA_GITAGGREGATE_UID:-1000}"
       GID: "${DOODBA_GITAGGREGATE_GID:-1000}"
       UMASK: "$DOODBA_UMASK"
+      # Coder git delegation for authenticated repositories
+      GIT_SSH_COMMAND: "${GIT_SSH_COMMAND:-}"
+      GIT_ASKPASS: "${GIT_ASKPASS:-}"
+      GIT_AUTHOR_NAME: "${GIT_AUTHOR_NAME:-}"
+      GIT_AUTHOR_EMAIL: "${GIT_AUTHOR_EMAIL:-}"
+      GIT_COMMITTER_NAME: "${GIT_COMMITTER_NAME:-}"
+      GIT_COMMITTER_EMAIL: "${GIT_COMMITTER_EMAIL:-}"
     user: root
     entrypoint: autoaggregate
 

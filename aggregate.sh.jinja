@@ -1,0 +1,25 @@
+#!/bin/bash
+# Script to run gitaggregator with Coder git delegation
+#
+# This script automatically exports the required environment variables
+# for Coder's git authentication to work inside the Docker container.
+
+set -e
+
+# Extract the Coder binary path from GIT_SSH_COMMAND
+if [ -n "$GIT_SSH_COMMAND" ]; then
+    export CODER_BINARY="${GIT_SSH_COMMAND%% *}"
+    echo "Using Coder binary: $CODER_BINARY"
+else
+    echo "Warning: GIT_SSH_COMMAND is not set. Coder git delegation may not work."
+fi
+
+# Set ownership variables
+export DOODBA_GITAGGREGATE_UID="$(id -u)"
+export DOODBA_GITAGGREGATE_GID="$(id -g)"
+export DOODBA_UMASK="$(umask)"
+
+echo "Running gitaggregator..."
+docker-compose -f setup-devel.yaml run --rm odoo
+
+echo "Aggregation complete!"
